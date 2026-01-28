@@ -1,0 +1,7 @@
+masterd:Home14m@38.91.106.245:21000
+masterd:Home14m@51.15.25.165:32058
+masterd:Home14m@34.46.20.55:57438
+masterd:Home14m@34.91.29.81:62504
+masterd:Home14m@34.152.8.37:64985
+masterd:Home14m@34.91.29.81:60184
+masterd:Home14m@34.141.128.184:12123

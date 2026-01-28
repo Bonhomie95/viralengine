@@ -1,0 +1,13 @@
+google-api-python-client>=2.70.0
+google-auth-oauthlib>=0.4.6
+requests>=2.31.0
+yt-dlp>=2024.6.4
+opencv-python>=4.8.1.78
+mediapipe==0.10.5
+librosa>=0.10.1
+numpy>=1.24.3
+moviepy>=1.0.3
+ffmpeg-python>=0.2.0
+scenedetect>=0.6.2
+schedule>=1.2.0
+python-dotenv>=1.0.0
