@@ -1,14 +1,15 @@
 import cv2
+import numpy as np
 from pathlib import Path
 
-def crop_to_shorts(input_video: Path, output_video: Path):
-    cap = cv2.VideoCapture(str(input_video))
-    fps = cap.get(cv2.CAP_PROP_FPS)
+def crop_to_shorts(input_path: Path, output_path: Path):
+    cap = cv2.VideoCapture(str(input_path))
 
-    target_w, target_h = 1080, 1920
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    W_out, H_out = 1080, 1920
 
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    out = cv2.VideoWriter(str(output_video), fourcc, fps, (target_w, target_h))
+    out = cv2.VideoWriter(str(output_path), fourcc, fps, (W_out, H_out))
 
     print("📱 Converting to cinematic Shorts format...")
 
@@ -17,18 +18,28 @@ def crop_to_shorts(input_video: Path, output_video: Path):
         if not ret:
             break
 
-        # Background (blurred)
-        bg = cv2.resize(frame, (target_w, target_h))
+        h, w = frame.shape[:2]
+
+        # --- BLURRED BACKGROUND ---
+        bg = cv2.resize(frame, (W_out, H_out))
         bg = cv2.GaussianBlur(bg, (55, 55), 0)
 
-        # Foreground (fit height)
-        h, w = frame.shape[:2]
-        scale = target_h / h
-        fg_w = int(w * scale)
-        fg = cv2.resize(frame, (fg_w, target_h))
+        # --- FOREGROUND (FIT TO WIDTH) ---
+        scale = W_out / w
+        new_w = W_out
+        new_h = int(h * scale)
 
-        x_offset = (target_w - fg_w) // 2
-        bg[:, x_offset:x_offset+fg_w] = fg
+        fg = cv2.resize(frame, (new_w, new_h))
+
+        # --- CENTER FOREGROUND ---
+        y_offset = (H_out - new_h) // 2
+
+        # Clip if taller than screen
+        if y_offset < 0:
+            fg = fg[abs(y_offset):abs(y_offset)+H_out, :]
+            y_offset = 0
+
+        bg[y_offset:y_offset+fg.shape[0], 0:fg.shape[1]] = fg
 
         out.write(bg)
 
