@@ -3,7 +3,6 @@ import subprocess
 from .shorts_cropper import crop_to_shorts
 from .overlays import add_overlays
 
-
 def merge_audio(original_video: Path, silent_video: Path, final_video: Path):
     print("🔊 Merging original audio...")
     subprocess.run(
